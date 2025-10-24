@@ -45,7 +45,21 @@ data class Payment(
 /** 결제 상태.
  * - 승인(Approved), 취소(Canceled) 등 단순 상태를 표현합니다.
  */
-enum class PaymentStatus { APPROVED, CANCELED }
+enum class PaymentStatus {
+    APPROVED,   // 결제 승인 성공
+    DECLINED,   // 결제 거절 (한도초과, 승인거절 등)
+    FAILED;     // 시스템 오류, 승인 실패 등
+
+    companion object {
+        fun from(value: String?): PaymentStatus =
+            when (value?.uppercase()) {
+                "APPROVED" -> APPROVED
+                "DECLINED" -> DECLINED
+                "FAILED" -> FAILED
+                else -> FAILED
+            }
+    }
+}
 
 /** 조회 API의 통계 응답에 사용되는 값 모음. */
 /** 조회 API의 통계 응답에 사용되는 값 모음. */

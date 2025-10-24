@@ -9,5 +9,5 @@ data class PgApproveResult(
     val approvalCode: String,
     @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     val approvedAt: LocalDateTime,
-    val status: PaymentStatus = PaymentStatus.APPROVED,
+    val status: PaymentStatus
 )
