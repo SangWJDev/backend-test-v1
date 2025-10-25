@@ -11,6 +11,7 @@ dependencies {
     implementation(projects.modules.application)
     implementation(projects.modules.infrastructure.persistence)
     implementation(projects.modules.external.pgClient)
+    implementation(projects.modules.common)
     implementation(libs.spring.boot.starter.jpa)
     implementation(libs.bundles.bootstrap)
     testImplementation(libs.bundles.test)
