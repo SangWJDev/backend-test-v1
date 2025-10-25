@@ -44,6 +44,7 @@ class PaymentService(
                 cardBin = command.cardBin,
                 cardLast4 = command.cardLast4,
                 productName = command.productName,
+                pgEncToken = command.pgEncToken
             ),
         )
         val hardcodedRate = java.math.BigDecimal("0.0300")

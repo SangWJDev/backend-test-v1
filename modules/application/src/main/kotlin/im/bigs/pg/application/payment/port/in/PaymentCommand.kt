@@ -10,6 +10,7 @@ import java.math.BigDecimal
  * @property cardBin 카드 BIN(없을 수 있음)
  * @property cardLast4 카드 마지막 4자리(없을 수 있음)
  * @property productName 상품명(없을 수 있음)
+ * @property pgEncToken pg사 결제 호출 enc(필수)
  */
 data class PaymentCommand(
     val partnerId: Long,
@@ -17,5 +18,6 @@ data class PaymentCommand(
     val cardBin: String? = null,
     val cardLast4: String? = null,
     val productName: String? = null,
+    val pgEncToken: String
 )
 

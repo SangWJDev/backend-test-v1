@@ -52,6 +52,7 @@ class PaymentController(
                 cardBin = req.cardBin,
                 cardLast4 = req.cardLast4,
                 productName = req.productName,
+                pgEncToken = req.pgEncToken
             ),
         )
         return ResponseEntity.ok(PaymentResponse.from(saved))
