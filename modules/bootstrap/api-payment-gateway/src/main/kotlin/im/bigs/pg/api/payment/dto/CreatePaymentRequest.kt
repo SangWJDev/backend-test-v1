@@ -10,5 +10,6 @@ data class CreatePaymentRequest(
     val cardBin: String? = null,
     val cardLast4: String? = null,
     val productName: String? = null,
+    val pgEncToken: String
 )
 

@@ -3,7 +3,6 @@ import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.domain.payment.PaymentStatus
 import im.bigs.pg.external.pg.client.TestPgClient
 import im.bigs.pg.external.pg.config.TestPgCredentials
-import im.bigs.pg.external.pg.util.TestPgCrypto
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.*
@@ -14,6 +13,7 @@ import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.client.WebClient
 import java.math.BigDecimal
 import java.time.LocalDateTime
+import java.util.*
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -40,7 +40,6 @@ class TestPgClientAdapterContractTest {
 
         client = TestPgClient(
             http = webClient,
-            crypto = TestPgCrypto(objectMapper),
             credential = creds
         )
     }
@@ -62,7 +61,7 @@ class TestPgClientAdapterContractTest {
                     """
             {
               "approvalCode": "10080728",
-              "approvedAt": "2025-10-08T03:31:34.181568Z",
+              "approvedAt": "2025-10-08T03:31:34.181568",
               "status": "APPROVED"
             }
             """.trimIndent()
@@ -76,7 +75,8 @@ class TestPgClientAdapterContractTest {
                 amount = BigDecimal(10000L),
                 productName = "테스트상품",
                 cardBin = "111111",
-                cardLast4 = "1111"
+                cardLast4 = "1111",
+                pgEncToken = UUID.randomUUID().toString(),
             )
         )
 
@@ -150,6 +150,7 @@ class TestPgClientAdapterContractTest {
         amount = BigDecimal(10000L),
         productName = "테스트상품",
         cardBin = "111111",
-        cardLast4 = "1111"
+        cardLast4 = "1111",
+        pgEncToken = UUID.randomUUID().toString(),
     )
 }
