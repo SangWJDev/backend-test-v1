@@ -5,6 +5,7 @@ import im.bigs.pg.application.pg.port.out.PgApproveResult
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
 import im.bigs.pg.domain.payment.PaymentStatus
 import im.bigs.pg.external.pg.config.TestPgCredentials
+import im.bigs.pg.external.pg.exception.PgClientException
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -27,13 +28,25 @@ class TestPgClient(
             .header("API-KEY", credential.apiKey)
             .bodyValue(mapOf("enc" to request.pgEncToken))
             .retrieve()
-            .onStatus({ it.value() == 401 }) {
-                Mono.error(RuntimeException("TestPG Unauthorized (401)"))
+            .onStatus({ it.value() == 401 }) { resp ->
+                Mono.error(
+                    PgClientException(
+                        upstreamStatus = 401,
+                        errorCode = "PG_UNAUTHORIZED",
+                        message = "PG 인증 실패(Unauthorized: API-KEY 또는 토큰 확인 필요)"
+                    )
+                )
             }
-            .onStatus({ it.value() == 422 }) {
-                it.bodyToMono(TestPgError::class.java)
+            .onStatus({ it.value() == 422 }) { resp ->
+                resp.bodyToMono(TestPgError::class.java)
                     .flatMap { err ->
-                        Mono.error(RuntimeException("TestPG Error ${err.errorCode}: ${err.message}"))
+                        Mono.error(
+                            PgClientException(
+                                upstreamStatus = 422,
+                                errorCode = err.errorCode,
+                                message = err.message
+                            )
+                        )
                     }
             }
             .bodyToMono(TestPgSuccess::class.java)
